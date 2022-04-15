@@ -1,0 +1,5 @@
+train: ../vincent-yolov5-dataset/train/images
+val: ../vincent-yolov5-dataset/valid/images
+
+nc: 1
+names: ['vincent']
