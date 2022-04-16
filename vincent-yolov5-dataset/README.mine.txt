@@ -1,0 +1,1 @@
+Note to self: this model is the best so far, but very slow (1.6s per frame)
