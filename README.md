@@ -7,6 +7,7 @@ conda (python 3.9) + pytorch + flask
 
 # Demo
 https://youtube.com/shorts/rQXyx075eDg
+Live demo: https://youtube.com/shorts/qvZCTCdRSbg
 
 # vincent_compilation.mp4
-TODO
+https://youtu.be/R-RIiv4xjtE
