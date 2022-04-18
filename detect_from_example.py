@@ -19,7 +19,7 @@ class ObjectDetection:
         self.model = self.load_model()
         self.classes = self.model.names
         self.out_file = out_file
-        self.device = "cpu"
+        self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
     def load_model(self):
         """
@@ -29,7 +29,7 @@ class ObjectDetection:
         model = torch.hub.load(
             "ultralytics/yolov5",
             "custom",
-            path="vincent-epochs-20-batch-16/weights/best.pt",
+            path="vincent-e20-b16-v5l.pt",
         )
         return model
 
@@ -42,7 +42,7 @@ class ObjectDetection:
         self.model.to(self.device)
         frame = [frame]
         results = self.model(frame)
-        labels, cord = results.xyxyn[0][:, -1].numpy(), results.xyxyn[0][:, :-1].numpy()
+        labels, cord = results.xyxyn[0][:, -1].cpu().numpy(), results.xyxyn[0][:, :-1].cpu().numpy()
         return labels, cord
 
     def class_to_label(self, x):
@@ -103,18 +103,16 @@ class ObjectDetection:
         four_cc = cv2.VideoWriter_fourcc(*"MJPG")
         out = cv2.VideoWriter(self.out_file, four_cc, 20, (x_shape, y_shape))
 
-        counter = 25
+
         # Window display
         while player.isOpened():
             # Capture frame-by-frame
             ret, frame = player.read()
             if ret == True:
                 start_time = time()
-                if counter >= 25:
-                    results = self.score_frame(frame)
-                    frame = self.plot_boxes(results, frame)
-                    counter = 0
-                counter += 1
+                results = self.score_frame(frame)
+                frame = self.plot_boxes(results, frame)
+
                 end_time = time()
                 fps = 1 / np.round(end_time - start_time, 3)
                 print(f"Frames Per Second : {fps}")
